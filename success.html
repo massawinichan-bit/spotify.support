@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sukces - Spotify</title>
+    <title>Éxito - Spotify</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -65,96 +65,23 @@
         .btn-confirm:hover {
             background-color: #1ed760;
         }
-        .lang-select {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-        .lang-select select {
-            background-color: #121212;
-            color: white;
-            border: 1px solid #333;
-            padding: 5px;
-            border-radius: 5px;
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Sélecteur de langue -->
-        <div class="lang-select">
-            <label for="language">🌐</label>
-            <select id="language">
-                <option value="pl" selected>Polski</option>
-                <option value="fr">Français</option>
-                <option value="en">English</option>
-                <option value="es">Español</option>
-                <option value="ru">Русский</option>
-            </select>
-        </div>
-
         <header>
             <img src="spotify-logo.png" alt="Spotify Logo" class="logo">
         </header>
 
         <section class="success-message">
             <div class="success-icon">✓</div>
-            <h2 data-translate="title">Subskrypcja zaktualizowana</h2>
-            <p data-translate="message">Twoja subskrypcja Spotify Premium została pomyślnie zaktualizowana.</p>
-            <button class="btn-confirm" data-translate="confirm">OK, ROZUMIEM</button>
+            <h2>Suscripción actualizada</h2>
+            <p>Tu suscripción a Spotify Premium se ha actualizado correctamente.</p>
+            <button class="btn-confirm">OK, ENTIENDO</button>
         </section>
     </div>
 
     <script>
-        // Traductions
-        const translations = {
-            pl: { 
-                title: "Subskrypcja zaktualizowana",
-                message: "Twoja subskrypcja Spotify Premium została pomyślnie zaktualizowana.",
-                confirm: "OK, ROZUMIEM"
-            },
-            fr: { 
-                title: "Abonnement mis à jour",
-                message: "Votre abonnement Spotify Premium a été mis à jour avec succès.",
-                confirm: "OK, J'AI COMPRIS"
-            },
-            en: { 
-                title: "Subscription Updated",
-                message: "Your Spotify Premium subscription has been successfully updated.",
-                confirm: "OK, GOT IT"
-            },
-            es: { 
-                title: "Suscripción actualizada",
-                message: "Tu suscripción a Spotify Premium se ha actualizado correctamente.",
-                confirm: "OK, ENTIENDO"
-            },
-            ru: { 
-                title: "Подписка обновлена",
-                message: "Ваша подписка Spotify Premium успешно обновлена.",
-                confirm: "OK, ПОНЯТНО"
-            }
-        };
-
-        const langSelect = document.getElementById("language");
-
-        function applyLanguage(lang) {
-            document.querySelectorAll("[data-translate]").forEach(el => {
-                const key = el.getAttribute("data-translate");
-                el.innerHTML = translations[lang][key] || el.innerHTML;
-            });
-        }
-
-        // Langue par défaut : polonais
-        const savedLang = localStorage.getItem("selectedLang") || "pl";
-        langSelect.value = savedLang;
-        applyLanguage(savedLang);
-
-        langSelect.addEventListener("change", () => {
-            const lang = langSelect.value;
-            localStorage.setItem("selectedLang", lang);
-            applyLanguage(lang);
-        });
-
-        // Redirection après clic sur le bouton
         document.querySelector('.btn-confirm').addEventListener('click', function() {
             window.location.href = "https://www.spotify.com";
         });
